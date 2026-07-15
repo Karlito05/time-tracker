@@ -1,8 +1,11 @@
 node_modules
 
+.env
 .env.local
 next-env.d.ts
 bun.lock
 
 .git
 .next
+
+/lib/generated/prisma
