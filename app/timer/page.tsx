@@ -1,8 +1,9 @@
 "use server";
 
-import TimerHome, { Activity } from "./timer";
+import { Activity } from "./typedefs";
 import { prisma } from "@/lib/prisma";
 import { auth } from "@/auth";
+import TimerHome from "./timer";
 
 export default async function Page() {
   const activities = await getActivities();

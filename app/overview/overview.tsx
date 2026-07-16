@@ -42,8 +42,8 @@ function Nav() {
 function ActivityView({ activitiesTimes }: { activitiesTimes: { name: string; time: string }[] }) {
   return (
     <div className="flex flex-col gap-2">
-      {activitiesTimes.map((p) => {
-        return <ActivityTime {...p} />;
+      {activitiesTimes.map((p, i) => {
+        return <ActivityTime {...p} key={i} />;
       })}
     </div>
   );
