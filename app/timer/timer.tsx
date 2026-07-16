@@ -155,6 +155,11 @@ function AddActivity() {
         onChange={(ce) => {
           setInputText(ce.target.value);
         }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") {
+            handleAddActivity();
+          }
+        }}
       ></Input>
       <Button className={"h-full"} onClick={handleAddActivity}>
         Add Activity
@@ -228,6 +233,12 @@ function ActivityEl({
           });
 
           ac.setActivities(newActivities);
+
+          if (id === ac.activeID) {
+            ac.setActiveID(undefined);
+            deactivate();
+            ac.setActiveSince(new Date());
+          }
         }}
       >
         <IconX />
