@@ -7,28 +7,25 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { IconX } from "@tabler/icons-react";
 import { Activity, useContext, useEffect, useState } from "react";
 import { createContext } from "react";
+import { activate, addActivity, removeActivity } from "./actions";
 
-type Activity = { name: string; id: number };
+export type Activity = { name: string; id: string };
 type ActivityContextProps = {
   activities: Activity[];
+  activeID?: string;
+  activeSince: Date;
   setActivities: (val: Activity[]) => void;
-  activeID: number | undefined;
-  setActiveID: (val: number | undefined) => void;
-  nextID: number;
-  setNextID: (val: number) => void;
-  curStartTime: number;
-  setCurStartTime: (val: number) => void;
+  setActiveID: (val: string) => void;
+  setActiveSince: (val: Date) => void;
 };
 
 const ActivityContext = createContext<ActivityContextProps>({
   activities: [],
-  setActivities: () => {},
   activeID: undefined,
+  activeSince: new Date(),
+  setActivities: () => {},
+  setActiveSince: () => {},
   setActiveID: () => {},
-  nextID: 1,
-  setNextID: () => {},
-  curStartTime: Date.now(),
-  setCurStartTime: () => {},
 });
 
 function milisecondsToFormat(totalMilis: number) {
@@ -44,24 +41,30 @@ function milisecondsToFormat(totalMilis: number) {
   return `${pad(days)}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
 }
 
-export default function Home() {
-  const [activeID, setActiveID] = useState<number | undefined>(undefined);
-  const [activities, setActivities] = useState<Activity[]>([]);
-  const [nextID, setNextID] = useState<number>(1);
-  const [curStartTime, setCurStartTime] = useState<number>(Date.now());
+export default function TimerHome({
+  initActivities,
+  initActiveID,
+  initActiveSince,
+}: {
+  initActivities: Activity[];
+  initActiveID?: string;
+  initActiveSince: Date;
+}) {
+  const [activities, setActivities] = useState(initActivities);
+  const [activeID, setActiveID] = useState(initActiveID);
+  const [activeSince, setActiveSince] = useState(initActiveSince);
+
   return (
     <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
       <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-start py-32 px-48 min-w-2xl bg-white dark:bg-black sm:items-start">
         <ActivityContext
           value={{
             activities: activities,
-            setActivities: setActivities,
             activeID: activeID,
+            activeSince: activeSince,
+            setActivities: setActivities,
+            setActiveSince: setActiveSince,
             setActiveID: setActiveID,
-            nextID: nextID,
-            setNextID: setNextID,
-            curStartTime: curStartTime,
-            setCurStartTime: setCurStartTime,
           }}
         >
           {" "}
@@ -97,7 +100,7 @@ function Timer() {
           }
         </CardHeader>
         <CardContent className="text-5xl flex justify-center items-center">
-          <div>{milisecondsToFormat(Date.now() - ac.curStartTime)}</div>
+          <div>{milisecondsToFormat(Date.now() - ac.activeSince.valueOf())}</div>
         </CardContent>
       </Card>
     </div>
@@ -116,10 +119,11 @@ function ActivityView() {
 function AddActivity() {
   const [inputText, setInputText] = useState("");
   const ac = useContext(ActivityContext);
-  function handleAddActivity() {
-    let newActivites = [...ac.activities, { name: inputText, id: ac.nextID }];
-    ac.setActivities(newActivites);
-    ac.setNextID(ac.nextID + 1);
+  async function handleAddActivity() {
+    const activityID = await addActivity(inputText);
+
+    ac.setActivities([...ac.activities, { name: inputText, id: activityID }]);
+
     setInputText("");
   }
   return (
@@ -143,14 +147,14 @@ function ActivityList() {
   const ac = useContext(ActivityContext);
   return (
     <div className="flex flex-col w-full gap-3">
-      {ac.activities.map((activity) => {
+      {ac.activities.map((activity, i) => {
         return (
           <ActivityEl
             name={activity.name}
             active={activity.id === ac.activeID}
             id={activity.id}
-            key={activity.id}
-            devMode={true}
+            key={i}
+            devMode={false}
           />
         );
       })}
@@ -166,43 +170,40 @@ function ActivityEl({
 }: {
   name: string;
   active?: boolean;
-  id: number;
+  id: string;
   devMode?: boolean;
 }) {
   const ac = useContext(ActivityContext);
-
-  function handleDelete() {
-    let newActivities = [...ac.activities];
-    newActivities = newActivities.filter((activity) => {
-      return activity.id !== id;
-    });
-    if (id === ac.activeID) {
-      ac.setActiveID(undefined);
-    }
-
-    ac.setActivities(newActivities);
-  }
-
-  function handleActivate() {
-    ac.setCurStartTime(Date.now());
-    ac.setActiveID(id);
-  }
-
   return (
     <Field orientation={"horizontal"} className="h-12">
       <Button
-        className={`flex-1 min-w-0 rounded-md px-5 h-full justify-start items-center flex text-xl font-bold truncate ${
+        className={`flex-1 min-w-0 overflow-hidden  rounded-md px-5 h-full justify-start items-center flex text-xl font-bold ${
           active ? "bg-primary" : "bg-zinc-900"
         }`}
-        onClick={handleActivate}
+        onClick={() => {
+          activate(id);
+          ac.setActiveID(id);
+          ac.setActiveSince(new Date());
+        }}
       >
-        {name} {devMode ? `id: ${id}` : ""}
+        <span className="overflow-hidden">
+          {name} {devMode ? `id: ${id}` : ""}
+        </span>
       </Button>
+
       <Button
         size={"icon-lg"}
         variant={"destructive"}
         className="h-12 w-12 shrink-0"
-        onClick={handleDelete}
+        onClick={() => {
+          removeActivity(id);
+          let newActivities = ac.activities;
+          newActivities = newActivities.filter((a) => {
+            return a.id != id;
+          });
+
+          ac.setActivities(newActivities);
+        }}
       >
         <IconX />
       </Button>
