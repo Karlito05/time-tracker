@@ -7,15 +7,16 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { IconX } from "@tabler/icons-react";
 import { Activity, useContext, useEffect, useState } from "react";
 import { createContext } from "react";
-import { activate, addActivity, removeActivity } from "./actions";
+import { activate, addActivity, deactivate, removeActivity } from "./actions";
+import Link from "next/link";
 
 export type Activity = { name: string; id: string };
 type ActivityContextProps = {
   activities: Activity[];
-  activeID?: string;
+  activeID?: string | undefined;
   activeSince: Date;
   setActivities: (val: Activity[]) => void;
-  setActiveID: (val: string) => void;
+  setActiveID: (val: string | undefined) => void;
   setActiveSince: (val: Date) => void;
 };
 
@@ -69,12 +70,30 @@ export default function TimerHome({
         >
           {" "}
           <div className="flex flex-col h-full w-full gap-5">
+            <Nav />
             <Timer />
             <ActivityView />
           </div>
         </ActivityContext>
       </main>
     </div>
+  );
+}
+
+function Nav() {
+  return (
+    <Field orientation={"horizontal"} className="w-full h-full">
+      <Link href={"/timer"} className="flex-1 h-10">
+        <Button className="h-10 w-full" variant={"default"}>
+          Timer
+        </Button>
+      </Link>
+      <Link href={"/overview"} className="flex-1 h-10">
+        <Button className="w-full h-10" variant={"outline"}>
+          Overview
+        </Button>
+      </Link>
+    </Field>
   );
 }
 
@@ -181,8 +200,14 @@ function ActivityEl({
           active ? "bg-primary" : "bg-zinc-900"
         }`}
         onClick={() => {
-          activate(id);
-          ac.setActiveID(id);
+          if (id === ac.activeID) {
+            deactivate();
+            ac.setActiveID(undefined);
+          } else {
+            activate(id);
+            ac.setActiveID(id);
+          }
+
           ac.setActiveSince(new Date());
         }}
       >

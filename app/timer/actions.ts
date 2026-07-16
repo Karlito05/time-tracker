@@ -26,6 +26,28 @@ export async function activate(id: string) {
     data: { activityId: id, userId: session.user.id, startedAt: new Date() },
   });
 }
+
+export async function deactivate() {
+  const session = await auth();
+
+  if (!session?.user?.id) throw new Error("Unauthorized");
+
+  const timeEntry = await prisma.timeEntry.findFirst({
+    where: { userId: session.user.id, endedAt: null },
+  });
+
+  if (timeEntry) {
+    await prisma.timeEntry.update({
+      where: {
+        id: timeEntry.id,
+      },
+      data: {
+        endedAt: new Date(),
+      },
+    });
+  }
+}
+
 export async function addActivity(name: string) {
   const session = await auth();
 
