@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import Link from "next/link";
+import { ActivityTimeList } from "./components/activity-time-list";
 
 export function Overview({
   activitiesTimes,
@@ -10,14 +11,9 @@ export function Overview({
   activitiesTimes: { name: string; time: string }[];
 }) {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-start py-32 px-48 min-w-2xl bg-white dark:bg-black sm:items-start">
-        {" "}
-        <div className="flex flex-col h-full w-full gap-5">
-          <Nav />
-          <ActivityView activitiesTimes={activitiesTimes} />
-        </div>
-      </main>
+    <div className="flex flex-col h-full w-full gap-5">
+      <Nav />
+      <ActivityTimeList activitiesTimes={activitiesTimes} />
     </div>
   );
 }
@@ -35,27 +31,6 @@ function Nav() {
           Overview
         </Button>
       </Link>
-    </Field>
-  );
-}
-
-function ActivityView({ activitiesTimes }: { activitiesTimes: { name: string; time: string }[] }) {
-  return (
-    <div className="flex flex-col gap-2">
-      {activitiesTimes.map((p, i) => {
-        return <ActivityTime {...p} key={i} />;
-      })}
-    </div>
-  );
-}
-
-function ActivityTime({ name, time }: { name: string; time: string }) {
-  return (
-    <Field orientation={"horizontal"} className="h-12">
-      <div className="flex-1 min-w-0 overflow-hidden  rounded-md px-5 h-full justify-between items-center flex text-xl font-bold bg-card">
-        <span className="overflow-hidden">{name} </span>
-        <span>{time}</span>
-      </div>
     </Field>
   );
 }
