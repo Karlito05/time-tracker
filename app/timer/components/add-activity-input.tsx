@@ -1,6 +1,6 @@
 import { useContext, useState } from "react";
-import { ActivityContext } from "../typedefs";
-import { addActivity } from "../actions";
+import { ActivityContext } from "../utils/typedefs";
+import { addActivity } from "../utils/actions";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";

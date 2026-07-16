@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { ActivityContext } from "../typedefs";
+import { ActivityContext } from "../utils/typedefs";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { milisecondsToFormat } from "../helpers";
+import { milisecondsToFormat } from "../utils/helpers";
 
 export function TimeCard() {
   const ac = useContext(ActivityContext);

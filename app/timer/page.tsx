@@ -1,9 +1,7 @@
 "use server";
 
-import { Activity } from "./typedefs";
-import { prisma } from "@/lib/prisma";
-import { auth } from "@/auth";
 import TimerHome from "./timer";
+import { getActiveId, getActiveSince, getActivities } from "./utils/actions";
 
 export default async function Page() {
   const activities = await getActivities();
@@ -11,49 +9,14 @@ export default async function Page() {
   const activeSince = await getActiveSince();
 
   return (
-    <TimerHome initActiveID={activeId} initActiveSince={activeSince} initActivities={activities} />
+    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-start py-32 px-48 min-w-2xl bg-white dark:bg-black sm:items-start">
+        <TimerHome
+          initActiveID={activeId}
+          initActiveSince={activeSince}
+          initActivities={activities}
+        />
+      </main>
+    </div>
   );
-}
-
-async function getActivities(): Promise<Activity[]> {
-  const session = await auth();
-
-  if (!session?.user?.id) throw new Error("Unauthorized");
-
-  const prismaActivities = await prisma.activity.findMany({ where: { userId: session.user.id } });
-  let activities: Activity[] = [];
-
-  prismaActivities.map((r) => {
-    activities.push({ id: r.id, name: r.name });
-  });
-
-  return activities;
-}
-
-async function getActiveId(): Promise<string | undefined> {
-  const session = await auth();
-
-  if (!session?.user?.id) throw new Error("Unauthorized");
-
-  const timeEntry = await prisma.timeEntry.findFirst({
-    where: { userId: session.user.id, endedAt: null },
-  });
-
-  if (!timeEntry) return undefined;
-
-  return timeEntry?.activityId;
-}
-
-async function getActiveSince(): Promise<Date> {
-  const session = await auth();
-
-  if (!session?.user?.id) throw new Error("Unauthorized");
-
-  const timeEntry = await prisma.timeEntry.findFirst({
-    where: { userId: session.user.id, endedAt: null },
-  });
-
-  if (!timeEntry) return new Date();
-
-  return timeEntry.startedAt;
 }

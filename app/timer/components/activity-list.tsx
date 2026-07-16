@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { ActivityContext } from "../typedefs";
+import { ActivityContext } from "../utils/typedefs";
 import { Field } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
-import { activate, deactivate, removeActivity } from "../actions";
+import { activate, deactivate, removeActivity } from "../utils/actions";
 import { IconX } from "@tabler/icons-react";
 
 export function ActivityList() {
