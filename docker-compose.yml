@@ -9,6 +9,18 @@ services:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+  nextjs-standalone-with-bun:
+    build:
+      context: .
+      dockerfile: Dockerfile.bun
+    image: nextjs-standalone-bun-image
+    container_name: nextjs-standalone-bun-container
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
 
 volumes:
   pgdata:
