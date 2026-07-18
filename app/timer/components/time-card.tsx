@@ -16,13 +16,20 @@ export function TimeCard() {
   });
   return (
     <Card className="w-full">
-      <CardHeader className="items-center justify-center text-2xl font-bold text-[#FFFFFF80]">
-        {
-          ac.activities.find((a) => {
-            return a.id == ac.activeID;
-          })?.name
-        }
-      </CardHeader>
+      {ac.activities.find((a) => {
+        return a.id == ac.activeID;
+      }) ? (
+        <CardHeader className="items-center justify-center text-2xl font-bold text-[#FFFFFF80]">
+          {
+            ac.activities.find((a) => {
+              return a.id == ac.activeID;
+            })?.name
+          }
+        </CardHeader>
+      ) : (
+        <></>
+      )}
+
       <CardContent className="text-5xl flex justify-center items-center">
         <div>
           {ac.activeID ? milisecondsToFormat(Date.now() - ac.activeSince.valueOf()) : "00:00:00:00"}
