@@ -110,9 +110,9 @@ export async function getActiveId(): Promise<string | undefined> {
     where: { userId: session.user.id, endedAt: null },
   });
 
-  if (!timeEntry) return undefined;
+  if (!timeEntry?.activityId) return undefined;
 
-  return timeEntry?.activityId;
+  return timeEntry.activityId;
 }
 
 export async function getActiveSince(): Promise<Date> {
@@ -124,7 +124,7 @@ export async function getActiveSince(): Promise<Date> {
     where: { userId: session.user.id, endedAt: null },
   });
 
-  if (!timeEntry) return new Date();
+  if (!timeEntry?.startedAt) return new Date();
 
   return timeEntry.startedAt;
 }

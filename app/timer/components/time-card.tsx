@@ -24,7 +24,9 @@ export function TimeCard() {
         }
       </CardHeader>
       <CardContent className="text-5xl flex justify-center items-center">
-        <div>{milisecondsToFormat(Date.now() - ac.activeSince.valueOf())}</div>
+        <div>
+          {ac.activeID ? milisecondsToFormat(Date.now() - ac.activeSince.valueOf()) : "00:00:00:00"}
+        </div>
       </CardContent>
     </Card>
   );
