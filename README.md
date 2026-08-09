@@ -1,25 +1,18 @@
 # Time Tracker
-
-## A Simple way to track time
-
----
+A Simple way to track time
 
 ## Quick Start
 
----
 
 If you just want to use this application it is hosted [here](https://timer.karlito.dev/timer).
 
 ## Features
-
----
 
 - Manual time tracking for whatever activities you need!
 - Overview of your time spent on activities.
 
 ## How to run locally
 
----
 
 Needed dependencies: Docker Compose, Bun
 
