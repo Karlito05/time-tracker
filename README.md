@@ -5,7 +5,7 @@
 <div id="user-content-toc">
   <ul align="center" style="list-style: none;">
     <summary>
-      <h1>Time Tracker</h1>
+      <h1 align="center">Time Tracker</h1>
     </summary>
   </ul>
 </div>
