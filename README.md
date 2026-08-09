@@ -2,10 +2,10 @@
   <img src="./screenshots/logo.png" alt="Time Tracker logo" width="160" />
 </p>
 
-<div id="toc">
-  <ul align="center" style="list-style: none">
+<div id="user-content-toc">
+  <ul align="center" style="list-style: none;">
     <summary>
-      <h1> Time Tracker </h1>
+      <h1>Time Tracker</h1>
     </summary>
   </ul>
 </div>
