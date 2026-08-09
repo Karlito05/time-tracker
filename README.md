@@ -2,13 +2,7 @@
   <img src="./screenshots/logo.png" alt="Time Tracker logo" width="160" />
 </p>
 
-<div id="user-content-toc">
-  <ul align="center" style="list-style: none;">
-    <summary>
-      <h1 align="center">Time Tracker</h1>
-    </summary>
-  </ul>
-</div>
+<h1 align="center">Time Tracker</h1>
 
 <h3 align="center" style="margin: 0.35rem 0 0; font-size: 24px;">A simple and focused way to track how you spend your time.</h3>
 
