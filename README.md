@@ -93,5 +93,3 @@ docker compose up --build nextjs-standalone-with-bun
 ```
 ${NEXTAUTH_URL}/api/auth/callback/github
 ```
-
-10. Hosted instance: the README links to `https://timer.karlito.dev/timer`. That hosted URL is provided by the project owner and was not verified here.
