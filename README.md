@@ -3,7 +3,7 @@
 </p>
 
 <div id="toc">
-  <ul style="list-style: none">
+  <ul align="center" style="list-style: none">
     <summary>
       <h1> Time Tracker </h1>
     </summary>
