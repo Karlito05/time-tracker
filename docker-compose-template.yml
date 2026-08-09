@@ -1,9 +1,11 @@
-
 services:
   db:
+    restart: unless-stopped
     image: postgres:16
     environment:
       POSTGRES_USER: app
+
+      # Change this      VVVVVVVV
       POSTGRES_PASSWORD: changeme
       POSTGRES_DB: timetracker
     ports:
@@ -15,6 +17,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
   nextjs-standalone-with-bun:
     build:
       context: .
@@ -24,8 +27,12 @@ services:
     environment:
       NODE_ENV: production
       PORT: "3000"
+
+      # Change this                  VVVVVVVV
       DATABASE_URL: postgresql://app:changeme@db:5432/timetracker
       AUTH_TRUST_HOST: "true"
+
+      # Change these next 4 lines
       NEXTAUTH_URL: YOUR DOMAIN
       AUTH_SECRET: SECRET
       AUTH_GITHUB_ID: GITHUB_ID
