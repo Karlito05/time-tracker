@@ -1,88 +1,121 @@
-# Time Tracker
-A Simple way to track time
+<p align="center">
+  <img src="./screenshots/logo.png" alt="Time Tracker logo" width="160" />
+</p>
 
-## Quick Start
+<p align="center" style="margin: 0; font-size: 2em; font-weight: 700;">Time Tracker</p>
 
+<p align="center" style="margin: 0.35rem 0 0; font-size: 1.1em;">A simple and focused way to track how you spend your time.</p>
 
-If you just want to use this application it is hosted [here](https://timer.karlito.dev/timer).
+---
 
-## Features
+If you want to try it right away, the hosted version is available at [timer.karlito.dev](https://timer.karlito.dev/timer).
 
-- Manual time tracking for whatever activities you need!
-- Overview of your time spent on activities.
+## Why use it?
 
-## How to run locally
+Time Tracker helps you capture activities quickly and review your time in a clear overview.
 
+### Features
 
-Needed dependencies: Docker Compose, Bun
+- Manual time tracking for any activity you want to log
+- A simple overview of your time spent across tasks
+- Lightweight workflow designed for everyday use
 
-1. Clone the repo:
+## Screenshots
 
-```
+<p align="center">
+  <img src="./screenshots/Screenshot_20260809_123452.png" alt="Time Tracker overview" width="48%" />
+  <img src="./screenshots/Screenshot_20260809_123510.png" alt="Time Tracker timer view" width="48%" />
+
+</p>
+
+## Run locally
+
+### Requirements
+
+- Docker Compose
+- Bun
+
+### Setup
+
+1. Clone the repository:
+
+```bash
 git clone https://github.com/Karlito05/time-tracker.git
+cd time-tracker
 ```
 
-2. Install dependencies with Bun:
+2. Install dependencies:
 
-```
-bun i
+```bash
+bun install
 ```
 
-3. Create `docker-compose.yml` from the template:
+3. Create the Docker Compose config from the template:
 
-```
+```bash
 cp docker-compose-template.yml docker-compose.yml
 ```
 
-4. Edit `docker-compose.yml` and set these variables (do not rely on line numbers):
+4. Update the environment values in `docker-compose.yml`:
 
-- In the `db` service: set `POSTGRES_PASSWORD` to a strong password.
-- In the `nextjs-standalone-with-bun` service: set `DATABASE_URL` (use the same DB password), `NEXTAUTH_URL`, `AUTH_SECRET`, `AUTH_GITHUB_ID`, and `AUTH_GITHUB_SECRET`.
-  - Example `NEXTAUTH_URL` for local testing: `http://localhost:3000` (must include the protocol and must match the OAuth callback URL you register on GitHub).
-  - Generate a secure `AUTH_SECRET`, for example:
+- In the `db` service, set a strong `POSTGRES_PASSWORD`
+- In the `nextjs-standalone-with-bun` service, set:
+  - `DATABASE_URL`
+  - `NEXTAUTH_URL`
+  - `AUTH_SECRET`
+  - `AUTH_GITHUB_ID`
+  - `AUTH_GITHUB_SECRET`
 
+Example `NEXTAUTH_URL` for local testing:
+
+```text
+http://localhost:3000
 ```
+
+Generate a secure `AUTH_SECRET` with:
+
+```bash
 openssl rand -hex 32
 # or
 node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-5. Create `.env` from the template and update values to match your `docker-compose.yml`:
+5. Create your local environment file:
 
-```
+```bash
 cp .env-template .env
 ```
 
-Note: the `DATABASE_URL` value in `.env` often uses `localhost` as the host (for local processes), while the `DATABASE_URL` inside Docker uses the service name (`db`). Do not blindly copy the compose `DATABASE_URL` into `.env` without adjusting the host.
+> Note: the `DATABASE_URL` in `.env` often uses `localhost`, while the Docker service uses the container hostname `db`. Make sure the value matches the environment where the app is running.
 
-6. Start only the database service:
+6. Start the database:
 
-```
+```bash
 docker compose up db -d
 ```
 
-7. Initialize the database (Prisma):
+7. Apply the Prisma migrations:
 
-```
+```bash
 bunx prisma migrate deploy
 ```
 
-8. Run the app:
+8. Start the app:
 
-- For development locally, use the `dev` script:
+For local development:
 
-```
+```bash
 bun dev
 ```
 
-- To run the production build in Docker (rebuild then start the service):
+For a production-style Docker run:
 
-```
+```bash
 docker compose up --build nextjs-standalone-with-bun
 ```
 
-9. OAuth note: when you register the GitHub OAuth App, set the callback URL to:
+9. If you use GitHub OAuth, set the callback URL to:
 
-```
+```text
 ${NEXTAUTH_URL}/api/auth/callback/github
 ```
