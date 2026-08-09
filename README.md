@@ -2,9 +2,9 @@
   <img src="./screenshots/logo.png" alt="Time Tracker logo" width="160" />
 </p>
 
-<p align="center" style="margin: 0; font-size: 32px; font-weight: 700;">Time Tracker</p>
+<h1 align="center" style="margin: 0; font-size: 32px; font-weight: 700;">Time Tracker</p>
 
-<p align="center" style="margin: 0.35rem 0 0; font-size: 24px;">A simple and focused way to track how you spend your time.</p>
+<h3 align="center" style="margin: 0.35rem 0 0; font-size: 24px;">A simple and focused way to track how you spend your time.</p>
 
 ---
 
